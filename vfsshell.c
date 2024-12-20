@@ -31,6 +31,8 @@ void ls();
 void enter(char *name);
 void back();
 void pwd();
+void find(Node *node, char *name);
+void tree(Node *node, int level);
 
 int main() {
 
@@ -58,6 +60,11 @@ int main() {
             back();
         } else if (strcmp(command, "pwd") == 0) {
             pwd();
+        } else if (strcmp(command, "find") == 0) {
+            scanf("%s", arg);
+            find(current, arg);
+        } else if (strcmp(command, "tree") == 0) {
+            tree(current, 0);
         } else {
             printf("vfsshell: command not found: %s\n", command);
         }
@@ -181,3 +188,29 @@ void pwd() {
     printf("\n");
 }
 
+void find(Node *node, char *name) {
+    if (strcmp(node->name, name) == 0) {
+        path(node);
+        printf("\n");
+    }
+    if (node->child != NULL) {
+        find(node->child, name);
+    }
+    if (node->next != NULL) {
+        find(node->next, name);
+    }
+}
+
+void tree(Node *node, int level) {
+    for (int i = 0; i < level; i++) {
+        printf("\t");
+    }
+    print_node(node);
+
+    if (node->child != NULL) {
+        tree(node->child, level + 1);
+    }
+    if (node->next != NULL) {
+        tree(node->next, level);
+    }
+}
