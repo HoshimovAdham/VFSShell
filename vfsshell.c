@@ -33,6 +33,8 @@ void enter(char name[]);
 void back();
 void pwd();
 void find(Node *node, char name[]);
+void quit();
+void tree(Node *node, int level);
 
 int main() {
     
@@ -65,6 +67,10 @@ int main() {
         } else if (strcmp(command, "find") == 0) {
             scanf("%s", arg);
             find(current, arg);
+        } else if (strcmp(command, "tree") == 0) {
+            tree(current, 0);
+        } else if (strcmp(command, "exit") == 0) {
+            quit();
         }
     }
 
@@ -202,4 +208,22 @@ void find(Node *node, char name[]) {
     if (node->next != NULL) {
         find(node->next, name);
     }
+}
+
+void tree(Node *node, int level) {
+    for (int i = 0; i < level; i++) {
+        printf("\t");
+    }
+    print_node(node);
+    if (node->child != NULL) {
+        tree(node->child, level + 1);
+    }
+    if (node->next != NULL) {
+        tree(node->next, level);
+    }
+}
+
+void quit() {
+    free(root);
+    exit(0);
 }
