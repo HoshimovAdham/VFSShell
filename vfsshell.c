@@ -28,6 +28,7 @@ void mkdir(char name[]);
 void touch(char name[]);
 void ls();
 void enter(char name[]);
+void back();
 
 int main() {
     
@@ -52,6 +53,8 @@ int main() {
         } else if (strcmp(command, "enter") == 0) {
             scanf("%s", arg);
             enter(arg);
+        } else if (strcmp(command, "back") == 0) {
+            back();
         }
     }
 
@@ -82,7 +85,7 @@ Node *create_node(char name[], int is_file) {
     strcpy(node->name, name);
     node->is_file = is_file;
     node->created_at = time(NULL);
-    node->parent = NULL;
+    node->parent = current;
     node->child = NULL;
     node->next = NULL;
 
@@ -159,5 +162,11 @@ void enter(char name[]) {
         current = node;
     } else {
         printf("enter: no such file or directory: %s\n", name);
+    }
+}
+
+void back() {
+    if (current != root) {
+        current = current->parent;
     }
 }
