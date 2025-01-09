@@ -21,11 +21,13 @@ void prompt();
 Node *create_node(char name[], int is_file);
 void insert_node(Node *node);
 void print_node(Node *node);
+Node *search_node(char name[]);
 
 // commands
 void mkdir(char name[]);
 void touch(char name[]);
 void ls();
+void enter(char name[]);
 
 int main() {
     
@@ -47,6 +49,9 @@ int main() {
             touch(arg);
         } else if (strcmp(command, "ls") == 0) {
             ls();
+        } else if (strcmp(command, "enter") == 0) {
+            scanf("%s", arg);
+            enter(arg);
         }
     }
 
@@ -105,6 +110,24 @@ void print_node(Node *node) {
     }
 }
 
+Node *search_node(char name[]) {
+    if (current->child != NULL) {
+        Node *temp = current->child;
+        if (strcmp(temp->name, name) == 0) {
+            return temp;
+        }
+
+        while (temp->next != NULL) {
+            if (strcmp(temp->name, name) == 0) {
+                return temp;
+            }
+            temp = temp->next;
+        }
+    }
+    
+    return NULL;
+}
+
 void mkdir(char name[]) {
     Node *node = create_node(name, 0);
 
@@ -118,7 +141,6 @@ void touch(char name[]) {
 }
 
 void ls() {
-
     if (current->child != NULL) {
         Node *temp = current->child;
         print_node(temp);
@@ -127,5 +149,15 @@ void ls() {
             print_node(temp->next);
             temp = temp->next;
         }
+    }
+}
+
+void enter(char name[]) {
+    Node *node = search_node(name);
+    
+    if (node != NULL){
+        current = node;
+    } else {
+        printf("enter: no such file or directory: %s\n", name);
     }
 }
