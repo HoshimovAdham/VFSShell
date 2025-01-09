@@ -20,10 +20,12 @@ void init();
 void prompt();
 Node *create_node(char name[], int is_file);
 void insert_node(Node *node);
+void print_node(Node *node);
 
 // commands
 void mkdir(char name[]);
 void touch(char name[]);
+void ls();
 
 int main() {
     
@@ -43,6 +45,8 @@ int main() {
         } else if (strcmp(command, "touch") == 0) {
             scanf("%s", arg);
             touch(arg);
+        } else if (strcmp(command, "ls") == 0) {
+            ls();
         }
     }
 
@@ -93,6 +97,14 @@ void insert_node(Node *node) {
     }
 }
 
+void print_node(Node *node) {
+    if (node->is_file) {
+        printf("%s\n", node->name);
+    } else {
+        printf("%s/\n", node->name);
+    }
+}
+
 void mkdir(char name[]) {
     Node *node = create_node(name, 0);
 
@@ -103,4 +115,17 @@ void touch(char name[]) {
     Node *node = create_node(name, 1);
 
     insert_node(node);
+}
+
+void ls() {
+
+    if (current->child != NULL) {
+        Node *temp = current->child;
+        print_node(temp);
+
+        while (temp->next != NULL) {
+            print_node(temp->next);
+            temp = temp->next;
+        }
+    }
 }
