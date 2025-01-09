@@ -32,6 +32,7 @@ void ls();
 void enter(char name[]);
 void back();
 void pwd();
+void find(Node *node, char name[]);
 
 int main() {
     
@@ -61,6 +62,9 @@ int main() {
             back();
         } else if (strcmp(command, "pwd") == 0) {
             pwd();
+        } else if (strcmp(command, "find") == 0) {
+            scanf("%s", arg);
+            find(current, arg);
         }
     }
 
@@ -185,4 +189,17 @@ void back() {
 void pwd() {
     path(current);
     printf("\n");
+}
+
+void find(Node *node, char name[]) {
+    if (strcmp(node->name, name) == 0) {
+        path(node);
+        printf("\n");
+    }
+    if (node->child != NULL) {
+        find(node->child, name);
+    }
+    if (node->next != NULL) {
+        find(node->next, name);
+    }
 }
