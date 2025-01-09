@@ -23,6 +23,7 @@ Node *create_node(char name[], int is_file);
 void insert_node(Node *node);
 void print_node(Node *node);
 Node *search_node(char name[]);
+void path(Node *node);
 
 // commands
 void mkdir(char name[]);
@@ -30,6 +31,7 @@ void touch(char name[]);
 void ls();
 void enter(char name[]);
 void back();
+void pwd();
 
 int main() {
     
@@ -57,6 +59,8 @@ int main() {
             enter(arg);
         } else if (strcmp(command, "back") == 0) {
             back();
+        } else if (strcmp(command, "pwd") == 0) {
+            pwd();
         }
     }
 
@@ -78,7 +82,10 @@ void init() {
 }
 
 void prompt() {
-    printf("%s:/%s$ ", username, current->name);
+
+    printf("%s:/", username);
+    path(current);
+    printf("$ ");
 }
 
 Node *create_node(char name[], int is_file) {
@@ -116,32 +123,34 @@ void print_node(Node *node) {
 }
 
 Node *search_node(char name[]) {
-    if (current->child != NULL) {
-        Node *temp = current->child;
-        if (strcmp(temp->name, name) == 0) {
-            return temp;
-        }
+    Node *node = current->child;
 
-        while (temp->next != NULL) {
-            if (strcmp(temp->name, name) == 0) {
-                return temp;
-            }
-            temp = temp->next;
+    while (node != NULL) {
+        if (strcmp(node->name, name) == 0) {
+            return node;
         }
+        node = node->next;
     }
     
     return NULL;
 }
 
+void path(Node *node) {
+    if (node == root) {
+        printf("%s/", node->name);
+        return;
+    }
+    path(node->parent);
+    printf("%s/", node->name);
+}
+
 void mkdir(char name[]) {
     Node *node = create_node(name, 0);
-
     insert_node(node);
 }
 
 void touch(char name[]) {
     Node *node = create_node(name, 1);
-
     insert_node(node);
 }
 
@@ -171,4 +180,9 @@ void back() {
     if (current != root) {
         current = current->parent;
     }
+}
+
+void pwd() {
+    path(current);
+    printf("\n");
 }
