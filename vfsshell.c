@@ -12,6 +12,7 @@ typedef struct Node {
     struct Node *next;
 } Node;
 
+char username[32];
 Node *root;
 Node *current;
 
@@ -33,6 +34,7 @@ void back();
 int main() {
     
     init();
+    printf("enter username: "); scanf("%s", username);
 
     char command[64]; 
     char arg[128]; 
@@ -76,7 +78,7 @@ void init() {
 }
 
 void prompt() {
-    printf("➜ %s ", current->name);
+    printf("%s:/%s$ ", username, current->name);
 }
 
 Node *create_node(char name[], int is_file) {
